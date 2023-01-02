@@ -4,21 +4,27 @@ const User = require("../model/User");
 
 // creating user
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
+router.get("/get-all", async (req, res) => {
+  // const { id } = req.params;
+  const search_key = req.query.search_key || "";
+  // var search_key = '"' + req.query.search_key + '"';
+  console.log(search_key);
+
   try {
-    const user = await User.findById(id);
-    res.status(200).json({ user });
+    const users = await User.find({
+      firstName: { $regex: search_key, $options: "i" },
+    });
+    res.status(200).json({ users });
   } catch (e) {
     res.status(400).send(e.message);
   }
 });
 
-router.get("/", async (req, res) => {
-  // const { id } = req.params;
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const users = await User.find();
-    res.status(200).json({ users });
+    const user = await User.findById(id);
+    res.status(200).json({ user });
   } catch (e) {
     res.status(400).send(e.message);
   }

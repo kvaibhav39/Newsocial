@@ -3,7 +3,10 @@ import appApi from "../services/appApi";
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: null,
+  initialState: {
+    user: null,
+    users: [],
+  },
   reducers: {
     addNotifications: (state, { payload }) => {
       if (state.newMessages[payload]) {
@@ -21,12 +24,18 @@ export const userSlice = createSlice({
     // save user after signup
     builder.addMatcher(
       appApi.endpoints.signupUser.matchFulfilled,
-      (state, { payload }) => payload
+      (state, { payload }) => {
+        state.user = payload;
+        return;
+      }
     );
     // save user after login
     builder.addMatcher(
       appApi.endpoints.loginUser.matchFulfilled,
-      (state, { payload }) => payload
+      (state, { payload }) => {
+        state.user = payload;
+        return;
+      }
     );
     // save user after update
     builder.addMatcher(
@@ -39,7 +48,17 @@ export const userSlice = createSlice({
       (state, { payload }) => payload
     );
     // remove user after logout
-    builder.addMatcher(appApi.endpoints.logoutUser.matchFulfilled, () => null);
+    builder.addMatcher(appApi.endpoints.logoutUser.matchFulfilled, (state) => {
+      state.user = null;
+      return;
+    });
+    builder.addMatcher(
+      appApi.endpoints.getUsers.matchFulfilled,
+      (state, { payload }) => {
+        state.users = payload || [];
+        return;
+      }
+    );
   },
 });
 

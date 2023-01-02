@@ -15,7 +15,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [privateMemberMsg, setPrivateMemberMsg] = useState({});
   const [newMessages, setNewMessages] = useState({});
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state?.user?.user);
   return (
     <BrowserRouter>
       <Routes>

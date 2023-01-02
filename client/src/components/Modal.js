@@ -1,16 +1,19 @@
 import React, { useEffect } from "react";
 import "./styles/Modal.css";
 import ProfilePic from "./assets/Default.png";
-import PlusIcon from './assets/plus.png'
+import PlusIcon from "./assets/plus.png";
 import { useState, useCallback } from "react";
-import { useUpdateUserMutation, useUploadUserPictureMutation } from "../services/appApi";
+import {
+  useUpdateUserMutation,
+  useUploadUserPictureMutation,
+} from "../services/appApi";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import CropModal from './CropModal';
+import CropModal from "./CropModal";
 
 const Modal = ({ open, onClose }) => {
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user.user);
   const { _id, picture } = user || {};
 
   const [cropImage, setCropImage] = useState("");
@@ -23,7 +26,7 @@ const Modal = ({ open, onClose }) => {
   const [updateUser] = useUpdateUserMutation();
   const [uploadUserPicture] = useUploadUserPictureMutation();
 
-  useEffect(()=> {
+  useEffect(() => {
     // axios.get('/user/' + _id)
     // .then(({data}) => {
     //   const user = data.user;
@@ -33,18 +36,20 @@ const Modal = ({ open, onClose }) => {
     setFirstName(user.firstName);
     setIsBio(user.bio);
     setIsPosition(user.position);
-    setIsWork(user.work)
-  }, [_id])
+    setIsWork(user.work);
+  }, [_id]);
 
   function handleSubmit(e) {
     e.preventDefault();
     // update logic
-    updateUser({_id, firstName, lastName, bio, position, work}).then(({ data }) => {
-      if (data) {
-        console.log("profile updated");
-        onClose();
+    updateUser({ _id, firstName, lastName, bio, position, work }).then(
+      ({ data }) => {
+        if (data) {
+          console.log("profile updated");
+          onClose();
+        }
       }
-    });
+    );
   }
 
   function onCropModalClose(picture) {
@@ -54,34 +59,34 @@ const Modal = ({ open, onClose }) => {
       return;
     }
 
-    updateUser({_id, picture}).then(({ data }) => {
+    updateUser({ _id, picture }).then(({ data }) => {
       setIsOpen(false);
       setCropImage("");
     });
-  };
+  }
 
   function onEditPic(e) {
     e.preventDefault();
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept= "image/*";
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
     input.onchange = function () {
       if (input.files.length === 0) return;
       const picture = input.files[0];
-      console.log('picture', picture);
+      console.log("picture", picture);
       const filereader = new FileReader();
       filereader.readAsDataURL(picture);
       filereader.onload = function (e) {
-         const base64 = e.target.result;
-         //console.log('base64', base64);
-         setCropImage(base64);
-         setIsOpen(true);
-      }
+        const base64 = e.target.result;
+        //console.log('base64', base64);
+        setCropImage(base64);
+        setIsOpen(true);
+      };
 
       // uploadUserPicture({ _id, picture }).then(({data}) => {
       //   console.log("picture updated");
       // });
-    }
+    };
     input.click();
   }
 
@@ -96,7 +101,7 @@ const Modal = ({ open, onClose }) => {
 
         <div className="picContainer" onClick={onEditPic}>
           <img className="modalPic" src={picture || ProfilePic} />
-          <img className='editPic' src={PlusIcon}/>
+          <img className="editPic" src={PlusIcon} />
         </div>
         <div className="inputWrap">
           <input
@@ -123,14 +128,11 @@ const Modal = ({ open, onClose }) => {
             className="modalInput"
             placeholder="Bio"
           />
-
         </div>
-        <button type="submit">
-            Save
-          </button>
+        <button type="submit">Save</button>
       </form>
 
-      <CropModal image={cropImage} open={isOpen} onClose={onCropModalClose}/>
+      <CropModal image={cropImage} open={isOpen} onClose={onCropModalClose} />
     </div>
   );
 };

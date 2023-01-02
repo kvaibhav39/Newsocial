@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const params = useParams();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.user);
   const { picture } = user || {};
   const [isOpen, setIsOpen] = useState(false);
   const [getPosts] = useGetPostsMutation();

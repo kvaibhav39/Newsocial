@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.user);
   console.log("====================================");
   console.log("user", user);
   console.log("====================================");

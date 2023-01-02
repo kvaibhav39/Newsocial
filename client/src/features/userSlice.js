@@ -40,12 +40,18 @@ export const userSlice = createSlice({
     // save user after update
     builder.addMatcher(
       appApi.endpoints.updateUser.matchFulfilled,
-      (state, { payload }) => payload
+      (state, { payload }) => {
+        state.user = payload;
+        return;
+      }
     );
     // save user uploading user profile
     builder.addMatcher(
       appApi.endpoints.uploadUserPicture.matchFulfilled,
-      (state, { payload }) => payload
+      (state, { payload }) => {
+        state.user = payload;
+        return;
+      }
     );
     // remove user after logout
     builder.addMatcher(appApi.endpoints.logoutUser.matchFulfilled, (state) => {

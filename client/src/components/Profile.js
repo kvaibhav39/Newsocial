@@ -16,9 +16,6 @@ const Profile = () => {
   const { picture } = user || {};
   const [isOpen, setIsOpen] = useState(false);
   const [getPosts] = useGetPostsMutation();
-  console.log("====================================");
-  console.log("user", user);
-  console.log("====================================");
 
   const posts = useSelector((state) => state.posts || []);
 

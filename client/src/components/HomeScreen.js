@@ -27,6 +27,7 @@ const HomeScreen = () => {
 
   const posts = useSelector((state) => state.posts || []);
   const user = useSelector((state) => state.user.user);
+  const users = useSelector((state) => state.user.users);
   const [searchKey, setSearchKey] = useState("");
   const { _id, picture } = user || {};
   const textAreaEl = useRef(null);
